@@ -10,15 +10,29 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t weather-app:latest .'
+                script {
+                    if (isUnix()) {
+                        sh 'docker build -t weather-app:latest .'
+                    } else {
+                        bat 'docker build -t weather-app:latest .'
+                    }
+                }
             }
         }
         
         stage('Run Docker Container') {
             steps {
-                bat 'docker stop weather-app || true'
-                bat 'docker rm weather-app || true'
-                bat 'docker run -d -p 5000:5000 --name weather-app weather-app:latest'
+                script {
+                    if (isUnix()) {
+                        sh 'docker stop weather-app || true'
+                        sh 'docker rm weather-app || true'
+                        sh 'docker run -d -p 5000:5000 --name weather-app weather-app:latest'
+                    } else {
+                        bat 'docker stop weather-app 2>nul || echo Container was not running'
+                        bat 'docker rm weather-app 2>nul || echo No container to remove'
+                        bat 'docker run -d -p 5000:5000 --name weather-app weather-app:latest'
+                    }
+                }
             }
         }
     }
