@@ -24,13 +24,17 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'docker stop weather-app || true'
-                        sh 'docker rm weather-app || true'
-                        sh 'docker run -d -p 5000:5000 --name weather-app weather-app:latest'
+                        sh '''
+                            docker stop weather-app || true
+                            docker rm weather-app || true
+                            docker run -d -p 5000:5000 --name weather-app weather-app:latest
+                        '''
                     } else {
-                        bat 'docker stop weather-app 2>nul || echo Container was not running'
-                        bat 'docker rm weather-app 2>nul || echo No container to remove'
-                        bat 'docker run -d -p 5000:5000 --name weather-app weather-app:latest'
+                        bat '''
+                            docker stop weather-app 2>nul || echo Container was not running
+                            docker rm weather-app 2>nul || echo No container to remove
+                            docker run -d -p 5000:5000 --name weather-app weather-app:latest
+                        '''
                     }
                 }
             }
