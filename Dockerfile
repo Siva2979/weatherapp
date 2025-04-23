@@ -12,6 +12,9 @@ COPY . .
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
+# Default API key (will be overridden by --env-file)
+ENV WEATHER_API_KEY=""
+
 # Expose the port
 EXPOSE 5000
 
